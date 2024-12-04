@@ -27,7 +27,7 @@ public class RoomController {
     
     //create room
     @PostMapping
-    public ResponseEntity<?> createRoom(String roomId) {
+    public ResponseEntity<?> createRoom(@RequestBody String roomId) {
         if(roomRepository.findByRoomId(roomId) != null) {
             return ResponseEntity.badRequest().body("Room already exists!");
         }
