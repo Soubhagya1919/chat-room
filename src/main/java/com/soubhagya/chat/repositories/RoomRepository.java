@@ -21,5 +21,5 @@ public interface RoomRepository extends MongoRepository<Room, String> {
     Room findByRoomId(String roomId);
 
     // Add a method to fetch messages for a room with pagination
-    Page<Message> findMessagesByRoomId(String roomId, Pageable pageable);
+    //Page<Message> findMessagesByRoomId(String roomId, Pageable pageable);
 }

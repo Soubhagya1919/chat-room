@@ -17,6 +17,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("api/v1/rooms")
+@CrossOrigin("http://localhost:3000")
 public class RoomController {
 
     private final RoomRepository roomRepository;
@@ -25,6 +26,14 @@ public class RoomController {
         this.roomRepository = roomRepository;
     }
     
+    /**
+     * Creates a new room with the specified room ID. If a room with the given ID
+     * already exists, it returns a bad request response.
+     *
+     * @param roomId the ID of the room to be created
+     * @return a ResponseEntity containing the created Room object if successful,
+     *         or a message indicating that the room already exists if not
+     */
     //create room
     @PostMapping
     public ResponseEntity<?> createRoom(@RequestBody String roomId) {
@@ -37,6 +46,13 @@ public class RoomController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedRoom);
     }
 
+    /**
+     * Retrieves the details of a room based on the provided room ID.
+     *
+     * @param roomId the unique identifier of the room to be retrieved.
+     * @return ResponseEntity containing the room details if found;
+     *         a bad request response with an error message if the room does not exist.
+     */
     //get room
     @GetMapping("/{roomId}")
     public ResponseEntity<?> getRoom(@PathVariable String roomId) {
@@ -48,6 +64,16 @@ public class RoomController {
         return ResponseEntity.ok(room);
     }
 
+    /**
+     * Retrieves a list of messages for a specified room. Supports pagination through
+     * the 'page' and 'size' parameters.
+     *
+     * @param roomId the unique identifier of the room whose messages are to be retrieved
+     * @param page the page number of the messages to be retrieved, defaults to 0 if not provided
+     * @param size the number of messages per page, defaults to 20 if not provided
+     * @return a ResponseEntity containing a list of Message objects if the room exists;
+     *         returns a bad request if the room does not exist
+     */
     //get messages of room
     @GetMapping("/{roomId}/messages")
     public ResponseEntity<List<Message>> getMessages(
@@ -72,6 +98,15 @@ public class RoomController {
         return ResponseEntity.ok(paginatedMessages);
     }
 
+    /**
+     * Paginates a list of messages by selecting a subset of messages based on the specified page number and size.
+     * The subset is defined in such a way that allows for navigating through pages of message history.
+     *
+     * @param messages the list of messages to paginate
+     * @param page the page number to retrieve, with 0 being the first page
+     * @param size the number of messages per page
+     * @return a sublist of messages corresponding to the requested page, or an empty list if the page is out of bounds
+     */
     private List<Message> paginateMessages(List<Message> messages, int page, int size) {
         int start = Math.max(0, messages.size() - (page + 1) * size);
         int end = Math.min(messages.size(), start + size);
