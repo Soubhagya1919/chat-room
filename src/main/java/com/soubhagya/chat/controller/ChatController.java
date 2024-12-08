@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
  * as @MessageMapping and @SendTo to define the message routing paths for WebSocket communication.
  */
 @Controller
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin("http://localhost:5173")
 public class ChatController {
 
     private final RoomRepository roomRepository;
